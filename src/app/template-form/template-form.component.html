@@ -1,0 +1,33 @@
+<!--
+1.novalidate是html5的属性，作用是不启用浏览器默认的表单校验
+2.angular也有如下指令：required  minLength
+3.
+-->
+<!--<form novalidate #myForm='ngForm' (ngSubmit)='submit(myForm,myForm.valid)'>-->
+<form novalidate #myForm='ngForm' (ngSubmit)='submit(myForm)'>
+  <div>用户名：<input type="text" required minlength="6" (input) = "usernameV(myForm)" ngModel name="username" placeholder="请输入用户名"></div>
+  <div [hidden] = "validV || untouchedV ">
+    <div class="error" [hidden]="!myForm.form.hasError('required','username')">
+      用户名不能为空
+    </div>
+    <div class="error" [hidden]="!myForm.form.hasError('minlength','username')">
+      用户名最小长度为6
+    </div>
+  </div>
+  <div>手机号：<input type="tel" appPhoneValidator ngModel name="phone" placeholder="请输入手机号"></div>
+  <div class="error" [hidden]="!myForm.form.hasError('phone','phone')">
+    手机号不正确
+  </div>
+  <div>邮箱：<input type="email" ngModel name="email" placeholder="请输入邮箱号"></div>
+  <div ngModelGroup='passwordGroup' appEqualValidator>
+    <div>密码：<input type="password" minlength="6" ngModel name="password" placeholder="请输入密码"></div>
+    <div class="error" [hidden] = "!myForm.form.hasError('minlength',['passwordGroup','password'])">
+      密码最小长度为6
+    </div>
+    <div>确认密码：<input type="password" ngModel name="pConfirm" placeholder="请输入确认密码"></div>
+    <div class="error" [hidden]="!myForm.form.hasError('equal','passwordGroup')">
+      {{myForm.form.getError('equal','passwordGroup')?.describe}}
+    </div>
+  </div>
+  <button type="submit">注册</button>
+</form>

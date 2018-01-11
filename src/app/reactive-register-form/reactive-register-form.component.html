@@ -1,0 +1,46 @@
+<form novalidate [formGroup]="registerForm" (ngSubmit)='submit()'>
+  <div>用户名：<input type="text" placeholder="请输入用户名" formControlName="username"></div>
+  <div [hidden]="registerForm.get('username').valid || registerForm.get('username').untouched">
+    <div class="error" [hidden]='!registerForm.hasError("required","username") && registerForm.get("username").touched'>
+      用户名是必填项
+    </div>
+    <div class="error" [hidden]="!registerForm.hasError('minlength','username')">
+      用户名最少为6个字符
+    </div>
+  </div>
+  <div>手机号：<input type="tel" placeholder="请输入手机号" formControlName="phone"></div>
+  <div [hidden]="registerForm.get('phone').valid || registerForm.get('phone').pristine">
+    <div class="error" [hidden]="!registerForm.hasError('phone','phone')">
+      请输入正确的手机号
+    </div>
+  </div>
+  <div [hidden]="!registerForm.get('phone').pending">
+    正在校验手机合法性
+  </div>
+  <div>邮箱：<input type="email" placeholder="请输入邮箱号" formControlName="email"></div>
+  <div formGroupName="passwordGroup">
+    <div>密码：<input type="password" placeholder="请输入密码" formControlName="password"></div>
+    <div
+      [hidden]="registerForm.get('passwordGroup.password').untouched || registerForm.get('passwordGroup.password').valid">
+      <div class="error" [hidden]="!registerForm.hasError('required',['passwordGroup','password'])">
+        密码为必填项
+      </div>
+      <div class="error" [hidden]="!registerForm.hasError('minlength',['passwordGroup','password'])">
+        密码的最小长度为6
+      </div>
+    </div>
+    <div>确认密码：<input type="password" placeholder="请输入确认密码" formControlName="pConfirm"></div>
+    <div [hidden]="registerForm.get('passwordGroup').valid || registerForm.get('passwordGroup.pConfirm').pristine">
+      <!--<div class="error" [hidden]="!registerForm.hasError('equal',['passwordGroup','pConfirm'])">
+      两次密码不一致
+    </div>-->
+      <div class="error" [hidden]="!registerForm.hasError('equal','passwordGroup')">
+        {{registerForm.getError('equal','passwordGroup')?.describe}}
+      </div>
+    </div>
+  </div>
+  <button type="submit">注册</button>
+</form>
+<div>
+  {{registerForm.status}}
+</div>
